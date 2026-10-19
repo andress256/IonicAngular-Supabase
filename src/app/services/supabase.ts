@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
-import { environment } from '../../environments/environment';
+import { SUPABASE_URL, SUPABASE_KEY } from '../app.config';
 import { Cliente } from '../models/cliente.model';
 
 const BUCKET = 'galeria';
@@ -19,10 +19,8 @@ export class SupabaseService {
   public currentUser = signal<User | null>(null);
 
   constructor() {
-    this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
+    this.supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
   }
-
-  // --- AUTENTICACIÓN ---
 
   async initSession(): Promise<void> {
     const { data } = await this.supabase.auth.getSession();
@@ -39,8 +37,6 @@ export class SupabaseService {
     await this.supabase.auth.signOut();
     this.currentUser.set(null);
   }
-
-  // --- CRUD CLIENTES ---
 
   async getClientes(): Promise<Cliente[]> {
     const { data, error } = await this.supabase
@@ -69,8 +65,6 @@ export class SupabaseService {
     const { error } = await this.supabase.from('clientes').delete().eq('id', id);
     if (error) throw error;
   }
-
-  // --- STORAGE ---
 
   async getImagenes(): Promise<Imagen[]> {
     const { data, error } = await this.supabase.storage.from(BUCKET).list('', { limit: 100 });
