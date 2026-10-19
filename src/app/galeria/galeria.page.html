@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Galería</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/home">Clientes</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (estado()) {
+    <p>{{ estado() }}</p>
+  }
+
+  <ion-grid>
+    <ion-row>
+      @for (img of imagenes(); track img.nombre) {
+        <ion-col size="12" size-md="6" size-lg="4">
+          <ion-card>
+            <img [src]="img.url" [alt]="img.nombre" />
+            <ion-card-header>
+              <ion-card-title>{{ img.nombre }}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+      }
+    </ion-row>
+  </ion-grid>
+</ion-content>
